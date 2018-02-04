@@ -1,0 +1,35 @@
+{
+  "name": "homebridge-dht-mqttpub",
+  "version": "0.0.1",
+  "description": "Homebridge accessory plugin that reads Temperature/Humidity values from DHT Sensors connected to a Raspberry PI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yz88/homebridge-dht-mqttpub.git"
+  },
+  "keywords": [
+    "nodemcu",
+    "dht22",
+    "homebridge",
+    "homebridge-plugin",
+    "mqtt",
+    "HAP-NodeJS",
+    "pigpio "
+  ],
+  "engines": {
+    "node": ">=6.12.0"
+  },
+  "dependencies": {
+    "homebridge": ">=0.4.36",
+    "os": ""
+  },
+  "author": "yz88",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/yz88/homebridge-dht-mqttpub/issues"
+  },
+  "homepage": "https://github.com/yz88/homebridge-dht-mqttpub#readme"
+}
