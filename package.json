@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "homebridge": ">=0.4.36",
-    "os": "",
+    "os": " ",
     "mqtt": ">=2.15.1"
   },
   "author": "yz88",
