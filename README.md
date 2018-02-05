@@ -77,6 +77,8 @@ tbd
 
 Optional parameters includes
 
+| Config Item | Description |
+| --- | --- |
 | `dhtExec` | Full command including path to read dht22 sensor.  Not needed unless dht22 is installed in a location not on the path.  Defaults to dht22 ie "dhtExec": "/usr/local/bin/dht22" |
 | `cputemp` | Full command including path to read cpu temp sensor.  Not needed unless cputemp is installed in a location not on the path.  Defaults to cputemp ie "cputemp": "/usr/local/bin/cputemp" |
 | `gpio` | Gpio pin to read for dht22 sensor.  Defaults to 4 ie "gpio": "4" |
