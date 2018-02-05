@@ -57,22 +57,22 @@ tbd
 # or with multiple DHT22's
 ```
 {
-   "accessory":"Dht",
-   "name":"dht22 - indoor",
-   "name_temperature":"Indoor Temperature",
-   "name_humidity":"Indoor Humdity",
-   "gpio":"4",
-   "service":"dht22",
-   "refresh":"60"
+   "accessory":		"Dht",
+   "name":		"dht22 - indoor",
+   "name_temperature": 	"Indoor Temperature",
+   "name_humidity":	"Indoor Humdity",
+   "gpio":		"4",
+   "service":		"dht22",
+   "refresh":	"60"
 },
 {
-   "accessory":"Dht",
-   "name":"dht22 - outdoor",
-   "name_temperature":"Outdoor Temperature",
-   "name_humidity":"Outdoor Humdity",
-   "gpio":"2",
-   "service":"dht22",
-   "refresh":"30"
+   "accessory":		"Dht",
+   "name":		"dht22 - outdoor",
+   "name_temperature":	"Outdoor Temperature",
+   "name_humidity":	"Outdoor Humdity",
+   "gpio":		"2",
+   "service":		"dht22",
+   "refresh":		"30"
 }
 ```
 
