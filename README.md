@@ -8,71 +8,79 @@ tbd
 
 ```
 {
-    "bridge": {
-        "name": "MyHomebridge",
-        "username": "CC:22:3D:E3:CD:33",
-        "port": 51826,
-        "pin": "031-45-154"
-    },
+  "bridge": {
+    "name": "MyHomebridge",
+    "username": "CC:22:3D:E3:CD:33",
+    "port": 51826,
+    "pin": "031-45-154"
+  },
+  "description": "HomeBridge DHT22",
 
-    "description": "HomeBridge DHT22",
-
- "platforms": [],
-
-   "accessories": [
-	{ "accessory":        "Dht",
-	  "name":             "cputemp",
-	  "service":          "Temperature" },
-	{ "accessory":        "Dht",
-          "name":             "dht22",
-    	  "name_temperature": "Temperature",
-          "name_humidity":    "Humdity",
-          "service":          "dht22" }
-	]
+  "platforms": [
+  ],
+  "accessories": [
+    {
+      "accessory": "Dht",
+      "name": "CPU Temperature",
+      "service": "Temperature",
+      "refresh": "15"
+    }, {
+      "accessory": "Dht",
+      "name": "dht22",
+      "name_temperature": "Temperature",
+      "name_humidity": "Humidity",
+      "service": "dht22",
+      "gpio": "4",
+      "refresh": "15"
+    }
+  ]
 }
 ```
 # Configuration - without cputemp
 ```
 {
-    "bridge": {
-        "name": "MyHomebridge",
-        "username": "CC:22:3D:E3:CD:33",
-        "port": 51826,
-        "pin": "031-45-154"
-    },
+  "bridge": {
+    "name": "MyHomebridge",
+    "username": "CC:22:3D:E3:CD:33",
+    "port": 51826,
+    "pin": "031-45-154"
+  },
+  "description": "HomeBridge DHT22",
 
-    "description": "HomeBridge DHT22",
-
- "platforms": [],
-
-   "accessories": [
-	{ "accessory":        "Dht",
-          "name":             "dht22",
-    	  "name_temperature": "Temperature",
-          "name_humidity":    "Humdity",
-          "service":          "dht22" }
-	]
+  "platforms": [
+  ],
+  "accessories": [
+    {
+      "accessory": "Dht",
+      "name": "dht22",
+      "name_temperature": "Temperature",
+      "name_humidity": "Humidity",
+      "service": "dht22",
+      "gpio": "4",
+      "refresh": "15"
+    }
+  ]
 }
 ```
 # or with multiple DHT22's
 ```
 {
-   "accessory":		"Dht",
-   "name":		"dht22 - indoor",
-   "name_temperature": 	"Indoor Temperature",
-   "name_humidity":	"Indoor Humdity",
-   "gpio":		"4",
-   "service":		"dht22",
-   "refresh":	"60"
+  "accessory":					"Dht",
+  "name":								"dht22 - indoor",
+  "name_temperature": 	"Indoor Temperature",
+  "name_humidity":			"Indoor Humdity",
+  "gpio":								"4",
+  "service":						"dht22",
+  "refresh":						"60"
 },
 {
-   "accessory":		"Dht",
-   "name":		"dht22 - outdoor",
-   "name_temperature":	"Outdoor Temperature",
-   "name_humidity":	"Outdoor Humdity",
-   "gpio":		"2",
-   "service":		"dht22",
-   "refresh":		"30"
+  "accessory":					"Dht",
+  "name":								"dht22 - outdoor",
+  "name_temperature":		"Outdoor Temperature",
+  "name_humidity":			"Outdoor Humdity",
+  "gpio":								"2",
+  "service":						"dht22",
+  "refresh":						"30"
 }
 ```
 
