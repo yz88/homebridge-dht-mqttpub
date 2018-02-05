@@ -77,16 +77,16 @@ tbd
 
 Optional parameters includes
 
-* `dhtExec` - Full command including path to read dht22 sensor.  Not needed
+| `dhtExec` | Full command including path to read dht22 sensor.  Not needed
 unless dht22 is installed in a location not on the path.  Defaults to dht22
-ie "dhtExec": "/usr/local/bin/dht22"
+ie "dhtExec": "/usr/local/bin/dht22" |
 
-* `cputemp` - Full command including path to read cpu temp sensor.  Not needed
+| `cputemp` | Full command including path to read cpu temp sensor.  Not needed
 unless cputemp is installed in a location not on the path.  Defaults to cputemp
-ie "cputemp": "/usr/local/bin/cputemp"
+ie "cputemp": "/usr/local/bin/cputemp" |
 
-* `gpio` - Gpio pin to read for dht22 sensor.  Defaults to 4
-ie "gpio": "4"
+| `gpio` | Gpio pin to read for dht22 sensor.  Defaults to 4
+ie "gpio": "4" |
 
 * `Refresh` - Frequency of data refresh. Defaults to 1 minute
 
