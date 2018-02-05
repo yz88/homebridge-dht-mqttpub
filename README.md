@@ -76,10 +76,7 @@ tbd
 # Configuration Options
 
 Optional parameters includes
-
-| `dhtExec` | Full command including path to read dht22 sensor.  Not needed
-unless dht22 is installed in a location not on the path.  Defaults to dht22
-ie "dhtExec": "/usr/local/bin/dht22" |
+| `dhtExec` | Full command including path to read dht22 sensor.  Not needed unless dht22 is installed in a location not on the path.  Defaults to dht22 ie "dhtExec": "/usr/local/bin/dht22" |
 
 | `cputemp` | Full command including path to read cpu temp sensor.  Not needed
 unless cputemp is installed in a location not on the path.  Defaults to cputemp
