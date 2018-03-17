@@ -11,15 +11,21 @@
 *      "accessory": "Dht",
 *      "name": "cputemp",
 *      "service": "Temperature"
-*  }, {
+*   }, {
 *      "accessory": "Dht",
-*      "name": "Temp/Humidity Sensor",
-*      "service": "dht22"
+*      "name": "dht22",
+*      "name_temperature": "Temperature",
+*      "name_humidity": "Humidity",
+*      "service": "dht22",
+*      "gpio": "4",
+*      "refresh": "15",
+*      "mqtt_broker": "rp-display.fritz.box",
+*      "mqtt_topic": "sensors/schuppen/"
 *  }, {        // For testing
 *      "accessory": "Dht",
 *      "name": "Test-DHT",
 *      "service": "dht22",
-*      "dhtExec": "Code/homebridge-dht/test/dht22"
+*      "dhtExecFile": "Code/homebridge-dht/test/dht22"
 *  }]
 *  
 *   or Multiple
@@ -45,7 +51,8 @@
 
 var Service;
 var Characteristic;
-var exec = require('child_process').execFile;
+var execFile = require('child_process').execFile;
+var exec = require('child_process').exec;
 var cputemp, dhtExec;
 var os = require("os");
 var hostname = os.hostname();
@@ -72,26 +79,29 @@ function DhtAccessory(log, config) {
   dhtExec = config.dhtExec || "dht22";
   cputemp = config.cputemp || "cputemp";
 
+  this.mqttbroker = config.mqtt_broker || "localhost";
+  this.mqtttopic = config.mqtt_topic || "sensor/dht";
 }
 
 DhtAccessory.prototype = {
   // function to get temperature and humidity from DHT sensor
   getDHTTemperature: function(callback) {
     // get DHT temperature and humidity; dhtExec (dhtExec = dht22) is a shell command on raspberry pi -> requires pigpio DHTXXD (http://abyz.me.uk/rpi/pigpio/examples.html)
-    exec(dhtExec, ['-g', this.gpio], function(error, responseBody, stderr) {
+    execFile(dhtExec, ['-g', this.gpio], function(error, responseBody, stderr) {
       if (error !== null) {
         this.log('dhtExec function failed: ' + error);
         callback(error);
       } else {
         // dht22 output format:
         // 0 24.8 C 50.3 %
+        // 0 -> dhtExec return code
+        // 24.8 -> temperature value
+        // C -> temperature unit
+        // 50.3 -> humidity value
+        // % -> humidity unit
         var result = responseBody.toString().split(/[ \t]+/);
-        var temperature = parseFloat(result[1]);
-        var humidity = parseFloat(result[3]);
 
-        this.log("DHT Status: %s, Temperature: %s, Humidity: %s", result[0], temperature, humidity);
-
-        // check status return code from DHTXXD
+        // check status return code from DHTXXD (dhtExec)
         //
         // DHTXXD returns three values.  A status, the temperature, and the
         // humidity.  The status is one of the following.  0 (good)
@@ -101,7 +111,6 @@ DhtAccessory.prototype = {
         // #DHT_BAD_CHECKSUM 1
         // #DHT_BAD_DATA     2
         // #DHT_TIMEOUT      3
-        
         var err;
         if (parseInt(result[0]) !== 0) {
           if (parseInt(result[0]) == 3) {
@@ -111,6 +120,32 @@ DhtAccessory.prototype = {
           }
           err = new Error("dht22 read failed");
         }
+
+        // get sensor values from string
+        var temperature = parseFloat(result[1]);
+        var humidity = parseFloat(result[3]);
+        this.log("DHT Status: %s, Temperature: %s, Humidity: %s", result[0], temperature, humidity);
+
+
+        // publish sensor value via MQTT
+        var PublishTemperature = 'mosquitto_pub -h ' + this.mqttbroker + ' -q 2 -t ' + this.mqtttopic + 'temperature -m ' + temperature;
+        exec(PublishTemperature, function (error, stdout, stderr) {
+          if (error !== null) {
+            this.log('MQTT publish failed: ' + error);
+          } else {
+            this.log('MQTT publish: ' + PublishTemperature);
+          }
+        }.bind(this));
+
+        var PublishHumidity = 'mosquitto_pub -h ' + this.mqttbroker + ' -q 2 -t ' + this.mqtttopic + 'humidity -m ' + humidity;        
+        exec(PublishHumidity, function (error, stdout, stderr) {
+          if (error !== null) {
+            this.log('MQTT publish failed: ' + error);
+          } else {
+            this.log('MQTT publish: ' + PublishHumidity);
+          }
+        }.bind(this));
+
         callback(err, temperature, humidity);
       }
     }.bind(this));
@@ -119,7 +154,7 @@ DhtAccessory.prototype = {
   // function to get cpu temperature
   getTemperature: function(callback) {
     // get CPU temperature; cputemp is a shell command on raspberry pi -> requires pigpio DHTXXD (http://abyz.me.uk/rpi/pigpio/examples.html)
-    exec(cputemp, function(error, responseBody, stderr) {
+    execFile(cputemp, function(error, responseBody, stderr) {
       if (error !== null) {
         this.log('cputemp function failed: ' + error);
         callback(error);
@@ -174,13 +209,8 @@ DhtAccessory.prototype = {
             minValue: -100,
             maxValue: 100
           });
-          // })
-          // Add an event listener to the 'get' event of the characteristic. This 'get' event is called if iOS wants to get a value, 
-          // or if a method called 'getValue' is called in homebridge. The callback passed to the event listener is called if the event happens.
-          // As it is called from outside this object, we have to ensure that 'this' references to the current 'this' which is the instance of 
-          // the accessory. To achieve that we 'bind' the function (actually a new copy of the function) to the current 'this'.
-          // .on('get', this.getTemperature.bind(this));
-
+        // function to peridically read temperature from sensor
+        // first read after refresh rate
         setInterval(function() {
           this.getTemperature(function(err, temp) {
             if (err)
